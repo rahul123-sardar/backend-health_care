@@ -2,37 +2,51 @@ import express from "express";
 import Patient from "../models/Patient.js";
 import upload from "../config/multer.js";
 
+
 const router = express.Router();
 
-router.options("/save", (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://frontend-health-care-pink.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  return res.status(200).end();
+
+
+
+
+
+
+
+// CORS middleware
+router.use((req, res, next) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://frontend-health-care-pink.vercel.app"
+  );
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  next();
 });
+
 
 
 router.post("/save", upload.single("image"), async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://frontend-health-care-pink.vercel.app');
-
   try {
-    console.log("req.body:", req.body);
-    console.log("req.file:", req.file);
 
-    const { patientId, name, vitals, billingCode, diagnosis, notes } = req.body;
-    const image = req.file ? req.file.path : null;
+    console.log("DB state:", mongoose.connection.readyState);
 
-  
-     const patient = new Patient(req.body);
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(500).json({ message: "Database not connected" });
+    }
 
+    const patient = await Patient.create({
+      ...req.body,
+      image: req.file ? req.file.path : null
+    });
 
-    await patient.save();
-    res.status(200).json({ message: "Patient saved successfully", patient });
+    res.json(patient);
+
   } catch (err) {
-    console.error("Full error:", err);
+    console.error(err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 });
+
 
 
 // router.post("/save", upload.single("image"), async (req, res) => {
