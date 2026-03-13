@@ -1,13 +1,14 @@
-const mongoose = require("mongoose");
+// Patient.js
+import mongoose from "mongoose";
 
 const patientSchema = new mongoose.Schema({
-  patientId: { type: Number, required: true, unique: true },
-  name: { type: String, required: true },
-  vitals: { type: String },
-  billingCode: { type: Number },
-  diagnosis: { type: String },
-  notes: { type: String },
-  image: { type: String }, // URL from Cloudinary
-}, { timestamps: true });
+  patientId: Number,
+  name: String,
+  vitals: String,
+  billingCode: Number,
+  diagnosis: String,
+  notes: String,
+  image: String,
+});
 
-module.exports = mongoose.model("Patient", patientSchema);
+export default   mongoose.model("Patient", patientSchema);
