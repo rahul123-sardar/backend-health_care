@@ -7,10 +7,28 @@ import patientRoutes from "./routes/patientRoutes.js";
 
 const app = express();
 
-app.use(cors({
-  origin: "https://frontend-health-care-pink.vercel.app",
-  methods: ["GET","POST","PUT","DELETE"],
-  credentials: true
+app.use(cors(async function handler(req, res) {
+  // Allow requests from your frontend
+  res.setHeader("Access-Control-Allow-Origin", "https://frontend-health-care-pink.vercel.app");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  // Handle preflight OPTIONS request
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
+  // Your normal POST logic here
+  if (req.method === "POST") {
+    try {
+      // Multer + Cloudinary upload logic here
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: err.message });
+    }
+  } else {
+    res.status(405).json({ message: "Method not allowed" });
+  }
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
