@@ -44,26 +44,11 @@ router.post("/save", upload.single("image"), async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-
-    console.log("Route hit");
-
-    const patient = await Patient.find({});
-
-    console.log("Data:", patient);
-    console.log(req.body);
-console.log(req.file);
-
-    res.json(patient);
-
+    const patients = await Patient.find({});
+    res.json(patients);
   } catch (error) {
-
-    console.log(error);
-
-    res.status(500).json({
-      message: error.message
-    });
-
+    console.error("Error fetching patients:", error); // logs exact error
+    res.status(500).json({ message: error.message });
   }
 });
-
 export default router;
