@@ -12,22 +12,24 @@ router.post("/save", upload.single("image"), async (req, res) => {
     console.log("Body:", req.body);
     console.log("File:", req.file);
 
-    const patient = await Patient.create({
+    const patientData = {
       patientId: req.body.patientId,
       name: req.body.name,
       vitals: req.body.vitals,
       billingCode: req.body.billingCode,
       diagnosis: req.body.diagnosis,
       notes: req.body.notes,
-      image: req.file.path // This is the Cloudinary URL
-    });
+      image: req.file ? req.file.path : null // <-- Safe fallback
+    };
+
+    const patient = await Patient.create(patientData);
 
     res.status(201).json({
       message: "Patient saved successfully",
       data: patient
     });
   } catch (err) {
-    console.log("ERROR:", err);
+    console.error("ERROR:", err);
     res.status(500).json({ message: err.message });
   }
 });
