@@ -7,12 +7,6 @@ import upload from "../config/multer.js";
 const router = express.Router();
 
 
-
-
-
-
-
-
 // CORS middleware
 router.use((req, res, next) => {
   res.setHeader(
@@ -36,15 +30,15 @@ router.post("/save", upload.single("image"), async (req, res) => {
       return res.status(400).json({ message: "patientId and name required" });
     }
 
-    const patient = await Patient.create({
-      patientId: Number(patientId),
-      name,
-      vitals,
-      billingCode,
-      diagnosis,
-      notes,
-      image: req.file ? req.file.path : null
-    });
+   const patient = await Patient.create({
+  patientId: Number(patientId),
+  name,
+  vitals,
+  billingCode: Number(billingCode),
+  diagnosis,
+  notes,
+  image: req.file?.path || null
+});
 
     res.json(patient);
 
