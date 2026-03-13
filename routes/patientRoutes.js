@@ -8,10 +8,8 @@ const router = express.Router();
 
 router.post("/save", upload.single("image"), async (req, res) => {
   try {
-    console.log("BODY:", req.body);
-    console.log("FILE:", req.file);
-
-    const imageUrl = req.file ? req.file.path : "";
+    console.log("Body:", req.body);
+    console.log("File:", req.file);
 
     const patient = await Patient.create({
       patientId: req.body.patientId,
@@ -20,20 +18,16 @@ router.post("/save", upload.single("image"), async (req, res) => {
       billingCode: req.body.billingCode,
       diagnosis: req.body.diagnosis,
       notes: req.body.notes,
-      image: imageUrl
+      image: req.file.path // This is the Cloudinary URL
     });
 
     res.status(201).json({
       message: "Patient saved successfully",
       data: patient
     });
-
-  } catch (error) {
-    console.log("ERROR:", error);
-    res.status(500).json({
-      message: error.message,
-      error: error
-    });
+  } catch (err) {
+    console.log("ERROR:", err);
+    res.status(500).json({ message: err.message });
   }
 });
 
