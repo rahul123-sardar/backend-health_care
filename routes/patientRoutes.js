@@ -43,21 +43,10 @@ router.post("/save", upload.single("image"), async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const patients = await Patient.find({});
-
-    return res.status(200).json({
-      success: true,
-      count: patients.length,
-      data: patients
-    });
-
+    res.json(patients);
   } catch (error) {
     console.error("Error fetching patients:", error);
-
-    return res.status(500).json({
-      success: false,
-      message: "Failed to fetch patients",
-      error: error.message
-    });
+    res.status(500).json({ message: error.message });
   }
 });
 export default router;
