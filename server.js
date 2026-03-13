@@ -9,7 +9,7 @@ const app = express();
 
 // middleware
 app.use(cors({
-  origin: "*",   // allow all for now
+  origin: "*https://frontend-health-care-pink.vercel.app/",   // allow all for now
   methods: ["GET","POST","PUT","DELETE"],
 }));
 
