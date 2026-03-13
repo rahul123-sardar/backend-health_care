@@ -2,8 +2,8 @@
 import mongoose from "mongoose";
 
 const patientSchema = new mongoose.Schema({
-  patientId: Number,
-  name: String,
+  patientId: { type: Number, required: true, unique: true },
+  name: { type: String, required: true },
   vitals: String,
   billingCode: Number,
   diagnosis: String,
