@@ -8,16 +8,7 @@ const router = express.Router();
 
 
 
- async function handler(req, res) {
-  try {
-    const patients = await Patient.find({});
-    res.status(200).json(patients);
-  } catch (error) {
-    console.error("Error fetching patients:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-}
-
+ 
 
 
 router.post("/save", upload.single("image"), async (req, res) => {
