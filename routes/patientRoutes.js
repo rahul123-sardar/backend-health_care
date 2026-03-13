@@ -5,7 +5,13 @@ import upload from "../config/multer.js";
 const router = express.Router();
 
 
-
+router.options("/save", (req, res) => {
+  // Preflight response
+  res.setHeader('Access-Control-Allow-Origin', 'https://frontend-health-care-pink.vercel.app');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  return res.status(200).end();
+});
 
 router.post("/save", upload.single("image"), async (req, res) => {
   try {
