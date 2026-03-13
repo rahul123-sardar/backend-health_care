@@ -1,4 +1,5 @@
 import express from "express";
+import mongoose from "mongoose";
 import Patient from "../models/Patient.js";
 import upload from "../config/multer.js";
 
@@ -28,14 +29,20 @@ router.use((req, res, next) => {
 router.post("/save", upload.single("image"), async (req, res) => {
   try {
 
-    console.log("DB state:", mongoose.connection.readyState);
 
-    if (mongoose.connection.readyState !== 1) {
-      return res.status(500).json({ message: "Database not connected" });
+    const { patientId, name, vitals, billingCode, diagnosis, notes } = req.body;
+
+    if (!patientId || !name) {
+      return res.status(400).json({ message: "patientId and name required" });
     }
 
     const patient = await Patient.create({
-      ...req.body,
+      patientId: Number(patientId),
+      name,
+      vitals,
+      billingCode,
+      diagnosis,
+      notes,
       image: req.file ? req.file.path : null
     });
 
@@ -43,7 +50,10 @@ router.post("/save", upload.single("image"), async (req, res) => {
 
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Server error", error: err.message });
+    res.status(500).json({
+      message: "Server error",
+      error: err.message
+    });
   }
 });
 
