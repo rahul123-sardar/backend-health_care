@@ -23,6 +23,13 @@ app.use((err, req, res, next) => {
 
 const PORT = 5000;
 
-app.listen(PORT,()=>{
-    console.log(`Server running on ${PORT}`);
+// app.listen(PORT,()=>{
+//     console.log(`Server running on ${PORT}`);
+// });
+
+
+app.get("/", (req, res) => {
+  res.send("API Running");
 });
+
+export default app;
