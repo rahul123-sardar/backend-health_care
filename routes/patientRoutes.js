@@ -15,6 +15,9 @@ const router = express.Router();
 router.post("/save", upload.single("image"), async (req, res) => {
   try {
 
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
+
     const { patientId, name, vitals, billingCode, diagnosis, notes } = req.body;
 
     const patient = await Patient.create({
@@ -24,14 +27,14 @@ router.post("/save", upload.single("image"), async (req, res) => {
       billingCode: Number(billingCode),
       diagnosis,
       notes,
-      image: req.file ? req.file.path : null
+      image: req.file?.path || null
     });
 
     res.json(patient);
 
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error", error: error.message });
+    console.error("UPLOAD ERROR:", error);
+    res.status(500).json({ message: error.message });
   }
 });
 
