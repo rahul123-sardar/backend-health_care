@@ -13,32 +13,47 @@ router.options("/save", (req, res) => {
   return res.status(200).end();
 });
 
-router.post("/save", upload.single("image"), async (req, res) => {
+
+router.post("/save", async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'https://frontend-health-care-pink.vercel.app');
   try {
-    console.log("Body:", req.body);
-    console.log("File:", req.file);
-
-    const patientData = {
-      patientId: req.body.patientId,
-      name: req.body.name,
-      vitals: req.body.vitals,
-      billingCode: req.body.billingCode,
-      diagnosis: req.body.diagnosis,
-      notes: req.body.notes,
-      image: req.file ? req.file.path : null // <-- Safe fallback
-    };
-
-    const patient = await Patient.create(patientData);
-
-    res.status(201).json({
-      message: "Patient saved successfully",
-      data: patient
-    });
+    // Your patient saving logic
+    const patient = new Patient(req.body);
+    await patient.save();
+    res.status(200).json({ message: "Patient saved successfully" });
   } catch (err) {
-    console.error("ERROR:", err);
-    res.status(500).json({ message: err.message });
+    console.log(err);
+    res.status(500).json({ message: "Server error" });
   }
 });
+
+
+// router.post("/save", upload.single("image"), async (req, res) => {
+//   try {
+//     console.log("Body:", req.body);
+//     console.log("File:", req.file);
+
+//     const patientData = {
+//       patientId: req.body.patientId,
+//       name: req.body.name,
+//       vitals: req.body.vitals,
+//       billingCode: req.body.billingCode,
+//       diagnosis: req.body.diagnosis,
+//       notes: req.body.notes,
+//       image: req.file ? req.file.path : null // <-- Safe fallback
+//     };
+
+//     const patient = await Patient.create(patientData);
+
+//     res.status(201).json({
+//       message: "Patient saved successfully",
+//       data: patient
+//     });
+//   } catch (err) {
+//     console.error("ERROR:", err);
+//     res.status(500).json({ message: err.message });
+//   }
+// });
 
 
 router.get("/", async (req, res) => {
