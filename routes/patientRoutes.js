@@ -5,25 +5,28 @@ import upload from "../config/multer.js";
 const router = express.Router();
 
 
-router.options("/save", (req, res) => {
-  // Preflight response
+router.post("/save", upload.single("image"), async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', 'https://frontend-health-care-pink.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  return res.status(200).end();
-});
 
-
-router.post("/save", async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://frontend-health-care-pink.vercel.app');
   try {
-    // Your patient saving logic
-    const patient = new Patient(req.body);
+    const { patientId, name, vitals, billingCode, diagnosis, notes } = req.body;
+    const image = req.file ? req.file.path : null; // Cloudinary URL
+
+    const patient = new Patient({
+      patientId,
+      name,
+      vitals,
+      billingCode,
+      diagnosis,
+      notes,
+      image,
+    });
+
     await patient.save();
-    res.status(200).json({ message: "Patient saved successfully" });
+    res.status(200).json({ message: "Patient saved successfully", patient });
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Server error" });
+    console.error("Error saving patient:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 });
 
