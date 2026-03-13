@@ -6,7 +6,7 @@ import patientRoutes from "./routes/patientRoutes.js";
 const app = express();
 
 app.use(cors({
-  origin: "https://frontend-health-care-pink.vercel.app", // frontend URL
+  origin: "https://frontend-health-care-pink.vercel.app/", // frontend URL
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
