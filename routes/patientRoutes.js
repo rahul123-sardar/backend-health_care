@@ -1,7 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
 import Patient from "../models/Patient.js";
-import upload from "../config/multer.js";
+import upload, { uploadToCloudinary } from "../config/multer.js";
+
 
 
 const router = express.Router();
@@ -11,29 +12,23 @@ const router = express.Router();
  
 
 
+
+
+
 router.post("/save", upload.single("image"), async (req, res) => {
   try {
+    let imageUrl = null;
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.buffer, Date.now().toString());
+      imageUrl = result.secure_url;
+    }
 
-    console.log("BODY:", req.body);
-    console.log("FILE:", req.file);
-
-    const { patientId, name, vitals, billingCode, diagnosis, notes } = req.body;
-
-    const patient = await Patient.create({
-      patientId: Number(patientId),
-      name,
-      vitals,
-      billingCode: Number(billingCode),
-      diagnosis,
-      notes,
-      image: req.file?.path || null
-    });
-
+    const patientData = { ...req.body, image: imageUrl };
+    const patient = await Patient.create(patientData);
     res.json(patient);
-
-  } catch (error) {
-    console.error("UPLOAD ERROR:", error);
-    res.status(500).json({ message: error.message });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 });
 
