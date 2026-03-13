@@ -9,23 +9,20 @@ router.post("/save", upload.single("image"), async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', 'https://frontend-health-care-pink.vercel.app');
 
   try {
-    const { patientId, name, vitals, billingCode, diagnosis, notes } = req.body;
-    const image = req.file ? req.file.path : null; // Cloudinary URL
+    console.log("req.body:", req.body);
+    console.log("req.file:", req.file);
 
-    const patient = new Patient({
-      patientId,
-      name,
-      vitals,
-      billingCode,
-      diagnosis,
-      notes,
-      image,
-    });
+    const { patientId, name, vitals, billingCode, diagnosis, notes } = req.body;
+    const image = req.file ? req.file.path : null;
+
+  
+     const patient = new Patient(req.body);
+
 
     await patient.save();
     res.status(200).json({ message: "Patient saved successfully", patient });
   } catch (err) {
-    console.error("Error saving patient:", err);
+    console.error("Full error:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 });
