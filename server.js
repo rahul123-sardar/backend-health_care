@@ -7,25 +7,19 @@ import patientRoutes from "./routes/patientRoutes.js";
 
 const app = express();
 
-app.use(
-  cors({
-    origin: "https://frontend-health-care-pink.vercel.app",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true
-  })
-);
-app.use(express.json());
+// middleware
+app.use(cors({
+  origin: "*",   // allow all for now
+  methods: ["GET","POST","PUT","DELETE"],
+}));
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// routes
 app.use("/api/patient", patientRoutes);
 
-const PORT = 5000;
+// connect database
+connectDB();
 
-const startServer = async () => {
-  await connectDB();
-
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-  });
-};
-
-startServer();
+export default app;
