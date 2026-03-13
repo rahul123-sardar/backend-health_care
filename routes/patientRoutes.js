@@ -23,31 +23,23 @@ router.use((req, res, next) => {
 router.post("/save", upload.single("image"), async (req, res) => {
   try {
 
-
     const { patientId, name, vitals, billingCode, diagnosis, notes } = req.body;
 
-    if (!patientId || !name) {
-      return res.status(400).json({ message: "patientId and name required" });
-    }
-
-   const patient = await Patient.create({
-  patientId: Number(patientId),
-  name,
-  vitals,
-  billingCode: Number(billingCode),
-  diagnosis,
-  notes,
-  image: req.file?.path || null
-});
+    const patient = await Patient.create({
+      patientId: Number(patientId),
+      name,
+      vitals,
+      billingCode: Number(billingCode),
+      diagnosis,
+      notes,
+      image: req.file ? req.file.path : null
+    });
 
     res.json(patient);
 
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({
-      message: "Server error",
-      error: err.message
-    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 });
 
