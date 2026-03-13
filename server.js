@@ -10,7 +10,6 @@ const app = express();
 // CORS Middleware (must be BEFORE routes)
 app.use(cors({
   origin: [
-    "http://localhost:5173",
     "https://frontend-health-care-pink.vercel.app"
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
