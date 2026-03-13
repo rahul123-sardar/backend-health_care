@@ -22,7 +22,6 @@ router.post("/save", upload.single("image"), async (req, res) => {
       const result = await uploadToCloudinary(req.file.buffer, Date.now().toString());
       imageUrl = result.secure_url;
     }
-
     const patientData = { ...req.body, image: imageUrl };
     const patient = await Patient.create(patientData);
     res.json(patient);
