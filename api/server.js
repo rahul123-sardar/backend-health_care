@@ -13,8 +13,8 @@ const app = express();
 app.use(cors({
   origin: "https://frontend-health-care-pink.vercel.app",
   methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true // only if you are sending cookies
 }));
+
 app.use(express.json());
 
 app.get("/", (req, res) => res.send("API running"));
