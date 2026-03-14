@@ -17,4 +17,12 @@ app.use("/api/patient", patientRoutes);
 
 connectDB();
 
+mongoose.connection.once("open", () => {
+  console.log("DB is ready");
+
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+});
+
 export default app;
