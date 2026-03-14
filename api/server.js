@@ -5,18 +5,20 @@ import connectDB from "../config/db.js";
 import patientRoutes from "../routes/patientRoutes.js";
 
 dotenv.config();
+await connectDB();
 
 const app = express();
 
-app.use(cors());
+// Allow React frontend
+app.use(cors({
+  origin: "http://localhost:5173", // React dev server
+  credentials: true
+}));
 app.use(express.json());
 
-await connectDB();
-
-app.get("/", (req, res) => {
-  res.send("API running");
-});
+app.get("/", (req, res) => res.send("API running"));
 
 app.use("/api/patient", patientRoutes);
 
-export default app;
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
