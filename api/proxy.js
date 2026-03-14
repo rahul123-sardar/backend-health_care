@@ -2,16 +2,15 @@ import axios from "axios";
 
 export default async function handler(req, res) {
   try {
-    const url = `https://backend-health-care-97bf.vercel.app/api/patient`;
     const response = await axios({
       method: req.method,
-      url,
+      url: "https://backend-health-care-97bf.vercel.app/api/patient",
       data: req.body,
       headers: req.headers,
     });
 
-    // Add CORS headers
-    res.setHeader("Access-Control-Allow-Origin", "*"); // allow all origins
+    // Allow CORS
+    res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
