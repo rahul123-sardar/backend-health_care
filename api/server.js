@@ -11,7 +11,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
- connectDB();
+connectDB();   // connect to DB
 
 app.use("/api/patient", patientRoutes);
 
