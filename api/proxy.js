@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   try {
     const response = await axios({
       method: req.method,
-      url: "https://backend-health-care-97bf.vercel.app/api/patient",
+      url: "https://backend-health-care-wrp.vercel.app/api/patient",
       data: req.body,
       headers: req.headers,
     });
