@@ -1,19 +1,21 @@
 import mongoose from "mongoose";
 
-// Define the schema
 const patientSchema = new mongoose.Schema({
   patientId: {
     type: Number,
-    unique: true,          // keeps patientId unique
-    required: true,        // ensure no nulls
+    unique: true,
+    required: true
   },
-  name: { type: String, required: true },
+  name: {
+    type: String,
+    required: true
+  },
   vitals: String,
   billingCode: Number,
   diagnosis: String,
   notes: String,
-  image: String,
+  image: String
 });
 
-// Use existing model if it exists (prevents overwrite in serverless hot reloads)
-export default mongoose.models.Patient || mongoose.model("Patient", patientSchema);
+export default mongoose.models.Patient ||
+mongoose.model("Patient", patientSchema);

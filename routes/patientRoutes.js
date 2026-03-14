@@ -5,13 +5,16 @@ import upload from "../config/multer.js";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const patients = await Patient.find();
-  res.json(patients);
+  try {
+    const patients = await Patient.find();
+    res.json(patients);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 router.post("/save", upload.single("image"), async (req, res) => {
   try {
-
     const { patientId, name, vitals, billingCode, diagnosis, notes } = req.body;
 
     const patient = new Patient({
