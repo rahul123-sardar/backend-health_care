@@ -2,7 +2,7 @@ import Patient from "../../models/Patient";
 import connectDB from "../../config/db";
 
 export default async function handler(req, res) {
-  await connectDB(); // make sure DB is connected
+  await connectDB(); // ensure DB is connected
 
   if (req.method === "GET") {
     try {
