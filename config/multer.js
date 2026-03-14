@@ -1,17 +1,13 @@
-// multer.js
 import multer from "multer";
-import cloudinary from "./cloudinary.js"; // your cloudinary config
-import CloudinaryStorage from "multer-storage-cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "./cloudinary.js";
 
-
-// Create storage using the new API
-const storage = CloudinaryStorage({
-  cloudinary, // pass cloudinary instance
-  params: async (req, file) => ({
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
     folder: "patients",
-    format: file.mimetype.split("/")[1], // jpg, png, etc.
-    public_id: `${Date.now()}-${file.originalname}`,
-  }),
+    allowed_formats: ["jpg", "jpeg", "png"],
+  },
 });
 
 const upload = multer({ storage });
