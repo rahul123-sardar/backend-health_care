@@ -1,17 +1,29 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import connectDB from "./config/db.js";
-import patientRoutes from "./routes/patientRoutes.js";
+// backend/api/patient.js
+import connectDB from "../config/db.js";
+import Patient from "../models/Patient.js";
 
-dotenv.config();
-connectDB();
+export default async function handler(req, res) {
+  // Connect to MongoDB (reuses existing connection if already connected)
+  await connectDB();
 
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-app.use("/api/patient", patientRoutes);
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  if (req.method === "GET") {
+    try {
+      const patients = await Patient.find({});
+      res.status(200).json(patients);
+    } catch (err) {
+      console.error("Error fetching patients:", err);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  } else if (req.method === "POST") {
+    try {
+      const patient = new Patient(req.body);
+      const savedPatient = await patient.save();
+      res.status(201).json(savedPatient);
+    } catch (err) {
+      console.error("Error saving patient:", err);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  } else {
+    res.status(405).json({ message: "Method Not Allowed" });
+  }
+}
