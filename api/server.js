@@ -11,9 +11,9 @@ const app = express();
 
 // CORS middleware: allow your frontend
 app.use(cors({
-  origin: "https://frontend-health-care-pink.vercel.app",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
+  origin: "https://frontend-health-care-pink.vercel.app", // frontend URL
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type"],
 }));
 
 app.use(express.json());
