@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import patientRoutes from "./routes/patientRoutes.js";
+import handler from "../api/patient.js";
 
 const app = express();
 
