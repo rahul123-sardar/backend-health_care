@@ -11,7 +11,7 @@ const app = express();
 
 // Allow React frontend
 app.use(cors({
-  origin: "http://localhost:5173", // React dev server
+  origin: "https://frontend-health-care-pink.vercel.app/", // React dev server
   credentials: true
 }));
 app.use(express.json());
