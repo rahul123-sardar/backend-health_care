@@ -11,11 +11,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// connect database
 await connectDB();
 
 app.get("/", (req, res) => {
-  res.send("API Working");
+  res.send("API running");
 });
 
 app.use("/api/patient", patientRoutes);
