@@ -1,21 +1,21 @@
 import express from "express";
 import Patient from "../models/Patient.js";
 import upload from "../config/multer.js";
+import cloudinary from "../config/cloudinary.js";
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-  try {
-    const patients = await Patient.find();
-    res.json(patients);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
 router.post("/save", upload.single("image"), async (req, res) => {
   try {
+
     const { patientId, name, vitals, billingCode, diagnosis, notes } = req.body;
+
+    let imageUrl = "";
+
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      imageUrl = result.secure_url;
+    }
 
     const patient = new Patient({
       patientId,
@@ -24,7 +24,7 @@ router.post("/save", upload.single("image"), async (req, res) => {
       billingCode,
       diagnosis,
       notes,
-      image: req.file ? req.file.path : null
+      image: imageUrl
     });
 
     const saved = await patient.save();
@@ -32,6 +32,7 @@ router.post("/save", upload.single("image"), async (req, res) => {
     res.status(201).json(saved);
 
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: error.message });
   }
 });
