@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
 
 router.post("/save", upload.single("image"), async (req, res) => {
   try {
-
+res.json({ message: "API working" });
     const { patientId, name, vitals, billingCode, diagnosis, notes } = req.body;
 
     const patient = new Patient({
