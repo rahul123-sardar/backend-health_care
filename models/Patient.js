@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 
 const patientSchema = new mongoose.Schema({
-  patientId: { type: Number, required: true },
-  name: { type: String, required: true },
+  patientId: Number,
+  name: String,
   vitals: String,
   billingCode: Number,
   diagnosis: String,
   notes: String,
-  image: String
+  image: String,
 });
 
 export default mongoose.models.Patient || mongoose.model("Patient", patientSchema);
