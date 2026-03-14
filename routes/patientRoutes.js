@@ -16,39 +16,35 @@ router.get("/", async (req, res) => {
 });
 
 // POST /api/patient/save
-const upload = multer({ storage: multer.memoryStorage() });
-
 router.post("/save", upload.single("image"), async (req, res) => {
   try {
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
 
-    let imageUrl = null;
+    res.json({ message: "Check console" });
+    const { patientId, name, vitals, billingCode, diagnosis, notes } = req.body;
 
-    if (req.file) {
-      const result = await cloudinary.uploader.upload_stream(
-        { folder: "patients" },
-        async (error, result) => {
-          if (error) throw error;
-        }
-      );
+    if (!patientId || !name) {
+      return res.status(400).json({ message: "Patient ID and Name are required" });
     }
 
+    // req.file.path will contain the Cloudinary URL
     const patient = new Patient({
-      patientId: req.body.patientId,
-      name: req.body.name,
-      vitals: req.body.vitals,
-      billingCode: req.body.billingCode,
-      diagnosis: req.body.diagnosis,
-      notes: req.body.notes,
-      image: imageUrl,
+      patientId,
+      name,
+      vitals,
+      billingCode,
+      diagnosis,
+      notes,
+      image: req.file ? req.file.path : null,
     });
 
-    await patient.save();
-
-    res.json({ message: "Patient saved successfully" });
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: error.message });
+    const savedPatient = await patient.save();
+    res.status(201).json(savedPatient);
+  } catch (err) {
+    console.error("Error saving patient:", err);
+    res.status(500).json({ message: err.message });
   }
 });
+
 export default router;
