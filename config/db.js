@@ -1,16 +1,14 @@
 import mongoose from "mongoose";
 
 const connectDB = async () => {
-  if (mongoose.connection.readyState >= 1) return; // reuse existing connection
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 30000, // 30 seconds timeout
-    });
+    if (mongoose.connection.readyState >= 1) return; // reuse connection
+
+    await mongoose.connect(process.env.MONGO_URI); // No extra options
     console.log("MongoDB connected!");
   } catch (err) {
     console.error("MongoDB connection error:", err);
+    process.exit(1); // stop server if DB fails
   }
 };
 
