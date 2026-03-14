@@ -11,7 +11,6 @@ router.get("/", async (req, res) => {
 
 router.post("/save", upload.single("image"), async (req, res) => {
   try {
-res.json({ message: "API working" });
     const { patientId, name, vitals, billingCode, diagnosis, notes } = req.body;
 
     const patient = new Patient({
@@ -21,7 +20,7 @@ res.json({ message: "API working" });
       billingCode,
       diagnosis,
       notes,
-      image: req.file ? req.file.path : null,
+      image: req.file ? req.file.path : null
     });
 
     const saved = await patient.save();
