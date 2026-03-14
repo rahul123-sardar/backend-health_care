@@ -19,7 +19,7 @@ router.post("/save", upload.single("image"), async (req, res) => {
     const { patientId, name, vitals, billingCode, diagnosis, notes } = req.body;
 
     if (!patientId || !name) {
-      return res.status(400).json({ message: "Patient ID and Name required" });
+      return res.status(400).json({ message: "Patient ID and Name are required" });
     }
 
     const patient = new Patient({
@@ -29,7 +29,7 @@ router.post("/save", upload.single("image"), async (req, res) => {
       billingCode,
       diagnosis,
       notes,
-      image: req.file ? req.file.path : null,
+      image: req.file ? req.file.path : null
     });
 
     const savedPatient = await patient.save();
@@ -37,7 +37,7 @@ router.post("/save", upload.single("image"), async (req, res) => {
     res.status(201).json(savedPatient);
 
   } catch (err) {
-    console.error("Error saving patient:", err);
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 });
